@@ -6,6 +6,8 @@ use Flash;
 use App\Page;
 use App\Tag;
 use Illuminate\Http\Request;
+use Auth;
+use App\Helpers\CategoryHierarchy;
 
 class PagesController extends Controller {
 
@@ -20,9 +22,13 @@ class PagesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(CategoryHierarchy $hierarchy)
 	{
+		// $pages = Page::all();
+		// $hierarchy->setupItems($pages);
+		// $list = $hierarchy->render();
 		return view('pages.index')->with(['pages' => Page::all()]);
+
 	}
 
 	/**
@@ -32,7 +38,14 @@ class PagesController extends Controller {
 	 */
 	public function create()
 	{
-		return view('pages.create');
+		$parents = Page::lists('title', 'id');
+		$parents = array_add($parents, 0, '');
+		$parents = array_sort($parents, function($value)
+		{
+			return $value;
+		});
+
+		return view('pages.create', compact('parents'));
 	}
 
 	/**
@@ -44,6 +57,9 @@ class PagesController extends Controller {
 	{
 		$data = $request->all();
 		$data['slug'] = $this->make_slug($request);
+
+		$data['user_id'] = Auth::user()->id;
+
 		$page = Page::create($data);
 
 		$tags = $this->make_tags($request);
@@ -74,6 +90,14 @@ class PagesController extends Controller {
 	public function edit($id)
 	{
 		$page = Page::findOrFail($id);
+
+		$parents = Page::where('id', '!=', $page->id)->lists('title', 'id');
+		$parents = array_add($parents, 0, '');
+		$parents = array_sort($parents, function($value)
+		{
+			return $value;
+		});
+
 		$tag_data = $page->tags;
 		$tag_array = array();
 		foreach($tag_data as $t)
@@ -81,7 +105,7 @@ class PagesController extends Controller {
 			$tag_array[] = $t->name;
 		}
 		$tags = implode(', ', $tag_array);
-		return view('pages.edit', compact('page', 'tags'));
+		return view('pages.edit', compact('page', 'tags', 'parents'));
 	}
 
 	/**
@@ -125,8 +149,14 @@ class PagesController extends Controller {
 		// make slug
 		if($request->slug == '')
 		{
+			$tmp_slug = '';
+			if($request->parent_id != 0)
+			{
+				$parent = Page::where('id', '=', $request->parent_id)->first();
+				$tmp_slug .= $parent->slug . '/';
+			}
 			$i = 1;
-			$tmp_slug = preg_replace('/[^a-z0-9]/', '-', strtolower($request->title));
+			$tmp_slug .= preg_replace('/[^a-z0-9]/', '-', strtolower($request->title));
 			do
 			{
 				$slug = $tmp_slug . ($i > 1 ? '-' . $i : '');

@@ -13,6 +13,7 @@
 			<td>Title</td>
 			<td>Slug</td>
 			<td>Tags</td>
+			<td>Parent</td>
 			<td></td>
 		</tr>
 	</thead>
@@ -27,6 +28,7 @@
 				{{ $tag->name . ($count + 1 < count($page->tags) ? ', ' : '') }}
 				@endforeach
 			</td>
+			<td>{{ $page->parent['title'] }}</td>
 			<td>
 				<a href="{{ url('/pages/' . $page->id . '/edit') }}" class="btn btn-primary">Edit</a>
 				{!! Form::open(['url' => '/pages/' . $page->id, 'method' => 'DELETE', 'style' => 'display:inline;']) !!}

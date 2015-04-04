@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model {
 
-	protected $fillable = ['title', 'body', 'slug', 'user_id'];
+	protected $fillable = ['title', 'body', 'slug', 'user_id', 'parent_id'];
 
 	public function user()
 	{
@@ -14,5 +14,15 @@ class Page extends Model {
 	public function tags()
 	{
 		return $this->belongsToMany('App\Tag')->withTimestamps();
+	}
+
+	public function parent()
+	{
+		return $this->hasOne('App\Page', 'id', 'parent_id');
+	}
+
+	public function children()
+	{
+		return $this->hasMany('App\Page', 'parent_id', 'id');
 	}
 }

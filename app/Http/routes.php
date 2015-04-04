@@ -11,6 +11,43 @@
 |
 */
 
+Route::get('test', function()
+{
+	$pages = App\Page::all()->toArray();
+	echo build_page_list(get_pages_array($pages));
+	// echo '<pre>';
+	// print_r(get_pages_array($pages));
+	// echo '</pre>';
+});
+
+function get_pages_array($arr, $parent = 0)
+{
+    $pages = Array();
+    foreach($arr as $page)
+    {
+        if($page['parent_id'] == $parent)
+        {
+            $page['sub'] = isset($page['sub']) ? $page['sub'] : get_pages_array($arr, $page['id']);
+            $pages[] = $page;
+        }
+    }
+    return $pages;
+}
+
+function build_page_list($pages, $out = '')
+{
+	$out .= '<ul>';
+	foreach($pages as $page)
+	{
+		$out .= '<li>';
+		$out .= '<a href="/' . $page['slug'] . '">' . $page['title'] . ' (' . $page['id'] . ')</a>';
+		$out .= build_page_list($page['sub']);
+		$out .= '</li>';
+	}
+	$out .= '</ul>';
+	return $out;
+}
+
 Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');

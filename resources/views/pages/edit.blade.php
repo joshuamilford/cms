@@ -31,6 +31,11 @@
 	{!! Form::textarea('body', null, ['class' => 'form-control']) !!}
 </div>
 
+<div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
+	{!! Form::label('parent_id', 'Parent', ['class' => 'control-label']) !!}
+	{!! Form::select('parent_id', $parents, null, ['class' => 'form-control']) !!}
+</div>
+
 <div class="form-group {{ $errors->has('tags') ? 'has-error' : '' }}">
 	{!! Form::label('tags', 'Tags', ['class' => 'control-label']) !!}
 	{!! Form::text('tags', $tags, ['class' => 'form-control']) !!}
