@@ -146,7 +146,7 @@ return [
 		'App\Providers\RouteServiceProvider',
 
 		'Laracasts\Flash\FlashServiceProvider',
-		'Collective\Html\HtmlServiceProvider',
+		'Collective\Html\HtmlServiceProvider'
 
 	],
 
@@ -198,7 +198,7 @@ return [
 
 		'Flash' => 'Laracasts\Flash\Flash',
 		'Form' => 'Collective\Html\FormFacade',
-		'Html' => 'Collective\Html\HtmlFacade',
+		'Html' => 'Collective\Html\HtmlFacade'
 
 	],
 

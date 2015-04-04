@@ -1,7 +1,8 @@
 @extends('app')
 
 @section('content')
-
-<h1>All Pages</h1>
-
+<div class="container">
+	<h1>{{ $page->title }}</h1>
+	{!! $page->body !!}
+</div>
 @stop

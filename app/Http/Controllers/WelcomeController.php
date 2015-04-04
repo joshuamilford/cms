@@ -1,5 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use App\Page;
+use App\Services\Markdowner;
+
 class WelcomeController extends Controller {
 
 	/*
@@ -18,18 +21,25 @@ class WelcomeController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()
-	{
-		$this->middleware('guest');
-	}
+	// public function __construct()
+	// {
+	// 	$this->middleware('guest');
+	// }
 
 	/**
 	 * Show the application welcome screen to the user.
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index($slug = '')
 	{
+		if(!empty($slug))
+		{
+			$page = Page::where('slug', '=', $slug)->firstOrFail();
+			$md = new Markdowner;
+			$page->body = $md->toHTML($page->body);
+			return view('index', compact('page'));
+		}
 		return view('welcome');
 	}
 

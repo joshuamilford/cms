@@ -31,6 +31,11 @@
 	{!! Form::textarea('body', null, ['class' => 'form-control']) !!}
 </div>
 
+<div class="form-group {{ $errors->has('tags') ? 'has-error' : '' }}">
+	{!! Form::label('tags', 'Tags', ['class' => 'control-label']) !!}
+	{!! Form::text('tags', null, ['class' => 'form-control']) !!}
+</div>
+
 {!! Form::submit('Save', ['class' => 'btn btn-primary btn-block']) !!}
 
 {!! Form::close() !!}

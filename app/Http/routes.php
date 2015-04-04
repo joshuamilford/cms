@@ -23,3 +23,5 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
 ]);
+
+Route::get('{slug?}', 'WelcomeController@index')->where('slug', '.+');
