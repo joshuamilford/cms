@@ -15,9 +15,6 @@ Route::get('test', function()
 {
 	$pages = App\Page::all()->toArray();
 	echo build_page_list(get_pages_array($pages));
-	// echo '<pre>';
-	// print_r(get_pages_array($pages));
-	// echo '</pre>';
 });
 
 function get_pages_array($arr, $parent = 0)
@@ -47,8 +44,6 @@ function build_page_list($pages, $out = '')
 	$out .= '</ul>';
 	return $out;
 }
-
-Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
